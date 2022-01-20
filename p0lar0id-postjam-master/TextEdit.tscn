@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="TextEdit" type="TextEdit"]
+margin_right = 164.0
+margin_bottom = 40.0
+text = "Press Escape To Restart"
+__meta__ = {
+"_edit_use_anchors_": false
+}

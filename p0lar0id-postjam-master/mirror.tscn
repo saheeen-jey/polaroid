@@ -1,0 +1,105 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://mirror2.png" type="Texture" id=1]
+[ext_resource path="res://white.png" type="Texture" id=2]
+[ext_resource path="res://mirror.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 61, 61.5 )
+
+[sub_resource type="OccluderPolygon2D" id=1]
+polygon = PoolVector2Array( -53, 65, 58, -46, 50, -54, 38, -54, -61, 45, -61, 57 )
+
+[sub_resource type="OccluderPolygon2D" id=2]
+polygon = PoolVector2Array( 0, -1000, 0, 0, 20, 0, 20, -1000 )
+
+[sub_resource type="OccluderPolygon2D" id=3]
+polygon = PoolVector2Array( 0, -1000, 0, 0, -20, 0, -20, -1000 )
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 10, 10.5 )
+shape = SubResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="."]
+light_mask = 0
+position = Vector2( 1.90735e-06, 1.90735e-06 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 1 )
+offset = Vector2( 25, 25 )
+
+[node name="BackOccluder" type="LightOccluder2D" parent="."]
+light_mask = 3
+position = Vector2( 12, 5 )
+occluder = SubResource( 1 )
+light_mask = 3
+
+[node name="UpperEdge" type="Node2D" parent="."]
+position = Vector2( 46, -45 )
+
+[node name="RayCast2D" type="RayCast2D" parent="UpperEdge"]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="UpperEdge"]
+light_mask = 2
+occluder = SubResource( 2 )
+light_mask = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="UpperEdge/LightOccluder2D"]
+collision_layer = 32
+collision_mask = 32
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="UpperEdge/LightOccluder2D/StaticBody2D"]
+polygon = PoolVector2Array( 0, -1000, 0, 0, 20, 0, 20, -1000 )
+
+[node name="Center" type="Node2D" parent="."]
+
+[node name="PlayerRayCast" type="RayCast2D" parent="Center"]
+enabled = true
+exclude_parent = false
+collision_mask = 2
+
+[node name="Light2D" type="Light2D" parent="Center"]
+texture = ExtResource( 2 )
+texture_scale = 50.0
+mode = 2
+shadow_enabled = true
+shadow_item_cull_mask = 3
+
+[node name="MouseRayCast" type="RayCast2D" parent="Center"]
+enabled = true
+
+[node name="Normal" type="RayCast2D" parent="Center"]
+cast_to = Vector2( -10, -10 )
+
+[node name="LowerEdge" type="Node2D" parent="."]
+position = Vector2( -45, 46 )
+
+[node name="RayCast2D" type="RayCast2D" parent="LowerEdge"]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="LowerEdge"]
+light_mask = 2
+occluder = SubResource( 3 )
+light_mask = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="LowerEdge/LightOccluder2D"]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LowerEdge/LightOccluder2D/StaticBody2D"]
+polygon = PoolVector2Array( 0, -1000, 0, 0, -20, 0, -20, -1000 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2( -14, -6 )
+scale = Vector2( 0.264776, 0.0095765 )
+polygon = PoolVector2Array( -132.187, 5847.65, 241.714, -4490.16, 287.035, -4490.16, 317.249, -3654.78, -101.973, 7936.09, -132.187, 7100.71 )
+
+[connection signal="input_event" from="Area2D" to="." method="_on_Area2D_input_event"]
